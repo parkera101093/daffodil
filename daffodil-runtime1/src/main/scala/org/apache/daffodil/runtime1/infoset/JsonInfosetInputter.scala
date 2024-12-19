@@ -85,12 +85,9 @@ class JsonInfosetInputter(input: java.io.InputStream) extends InfosetInputter {
       jsp.getCurrentToken() match {
         case JsonToken.START_OBJECT => if (objectDepth == 1) StartDocument else StartElement
         case JsonToken.END_OBJECT => EndElement
-        case JsonToken.VALUE_STRING |
-             JsonToken.VALUE_NUMBER_INT |
-             JsonToken.VALUE_NUMBER_FLOAT |
-             JsonToken.VALUE_TRUE |
-             JsonToken.VALUE_FALSE |
-             JsonToken.VALUE_NULL => {
+        case JsonToken.VALUE_STRING | JsonToken.VALUE_NUMBER_INT |
+            JsonToken.VALUE_NUMBER_FLOAT | JsonToken.VALUE_TRUE | JsonToken.VALUE_FALSE |
+            JsonToken.VALUE_NULL => {
           // we don't want to start faking element end yet, but signify that
           // after a call to next(), we will want to fake it
           nextEventShouldBeFakeEnd = true
@@ -124,8 +121,12 @@ class JsonInfosetInputter(input: java.io.InputStream) extends InfosetInputter {
     runtimeProperties: java.util.Map[String, String]
   ): String = {
     if (!jsp.getCurrentToken().isScalarValue()) {
-      throw new NonTextFoundInSimpleContentException("Unexpected array or object '" + getLocalName + "' on line " + jsp.getTokenLocation().getLineNr())
-    } else if  (jsp.getCurrentToken() == JsonToken.VALUE_NULL) {
+      throw new NonTextFoundInSimpleContentException(
+        "Unexpected array or object '" + getLocalName + "' on line " + jsp
+          .getTokenLocation()
+          .getLineNr()
+      )
+    } else if (jsp.getCurrentToken() == JsonToken.VALUE_NULL) {
       null
     } else {
       // this handles unescaping any escaped characters

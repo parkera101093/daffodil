@@ -139,7 +139,7 @@ class JsonInfosetOutputter private (writer: java.io.BufferedWriter, pretty: Bool
         d.isInfinite || d.isNaN
       }
       case DFDLPrimType.Float => {
-        val f = simple.getFloat.toDouble
+        val f = simple.getFloat
         f.isInfinite || f.isNaN
       }
       case _ => false
